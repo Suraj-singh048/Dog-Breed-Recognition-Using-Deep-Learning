@@ -121,6 +121,29 @@ def predict_breed(model, image_array, unique_breeds):
     return predicted_breed, confidence
 
 # ==============================
+# Function to handle prediction and display results
+# ==============================
+def handle_prediction(model, image, unique_breeds):
+    try:
+        # Preprocess
+        image_array = preprocess_image(image)
+
+        # Prediction
+        with st.spinner('🔍 Predicting...'):
+            predicted_breed, confidence = predict_breed(model, image_array, unique_breeds)
+
+        # Display results based on confidence
+        if confidence < 40:
+            st.warning("⚠️ **Result:** No dog recognized or too much noise in the image.")
+        else:
+            st.success("✅ Prediction Complete!")
+            st.markdown(f"**Predicted Breed:** {predicted_breed}")
+            st.markdown(f"**Confidence:** {confidence:.2f}%")
+
+    except Exception as e:
+        st.error(f"An error occurred during prediction: {e}")
+
+# ==============================
 # Main Function
 # ==============================
 def main():
@@ -152,20 +175,11 @@ def main():
                 image = Image.open(uploaded_file)
                 st.image(image, caption='Uploaded Image', use_container_width=True)
 
-                # Preprocess
-                image_array = preprocess_image(image)
-
-                # Prediction
-                with st.spinner('🔍 Predicting...'):
-                    predicted_breed, confidence = predict_breed(model, image_array, unique_breeds)
-
-                # Display results
-                st.success("✅ Prediction Complete!")
-                st.markdown(f"**Predicted Breed:** {predicted_breed}")
-                st.markdown(f"**Confidence:** {confidence:.2f}%")
+                # Handle prediction and display results
+                handle_prediction(model, image, unique_breeds)
 
             except Exception as e:
-                st.error(f"An error occurred during prediction: {e}")
+                st.error(f"An error occurred during processing: {e}")
         else:
             st.info("🖼️ Please upload an image of a dog to get started.")
 
@@ -177,20 +191,11 @@ def main():
                 image = Image.open(camera_image)
                 st.image(image, caption='Captured Image', use_container_width=True)
 
-                # Preprocess
-                image_array = preprocess_image(image)
-
-                # Prediction
-                with st.spinner('🔍 Predicting...'):
-                    predicted_breed, confidence = predict_breed(model, image_array, unique_breeds)
-
-                # Display results
-                st.success("✅ Prediction Complete!")
-                st.markdown(f"**Predicted Breed:** {predicted_breed}")
-                st.markdown(f"**Confidence:** {confidence:.2f}%")
+                # Handle prediction and display results
+                handle_prediction(model, image, unique_breeds)
 
             except Exception as e:
-                st.error(f"An error occurred during prediction: {e}")
+                st.error(f"An error occurred during processing: {e}")
         else:
             st.info("📸 Capture a photo of a dog to get started.")
 
