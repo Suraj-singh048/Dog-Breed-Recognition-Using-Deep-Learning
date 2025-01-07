@@ -76,27 +76,7 @@ add_custom_css()
 # ==============================
 # Title and Main Information
 # ==============================
-st.title("🐶 Dog Breed Identification App")
-
-st.markdown(
-    """
-    Welcome to the **Dog Breed Identification App**! This application utilizes advanced deep learning techniques to accurately identify dog breeds from images. Whether you're a dog enthusiast, a veterinarian, or simply curious, this app provides quick and reliable breed identification right at your fingertips.
-
-    **What This App Does:**
-    - **Image Upload:** Easily upload a photo of your dog or any dog you encounter.
-    - **Live Camera Capture:** Use your device's camera to take a real-time photo for immediate identification.
-    - **Breed Prediction:** Leveraging a trained deep learning model, the app predicts the dog's breed with high accuracy.
-    - **Confidence Scores:** Receive confidence percentages indicating the reliability of each prediction.
-
-    **Effectiveness:**
-    - **High Accuracy:** Our model achieves up to **92% accuracy** in breed prediction.
-    - **Comprehensive Dataset:** Trained on over **10,000 images** covering **120 different breeds**.
-    - **Optimized Performance:** Utilizes the **MobileNetV3** architecture, ensuring both speed and precision.
-
-    **Developed By:**
-    - **Suraj Singh** – A passionate AI developer with expertise in machine learning and computer vision. For any questions or feedback, feel free to reach out at [surajpratapsingh9798@gmail.com](mailto:surajpratapsingh9798@gmail.com).
-    """
-)
+st.title("Identify your 🐶")
 
 # ==============================
 # Function to load label mapping
@@ -213,6 +193,26 @@ def main():
                 st.error(f"An error occurred during prediction: {e}")
         else:
             st.info("📸 Capture a photo of a dog to get started.")
+
+    st.markdown(
+    """
+    Welcome to the **Dog Breed Identification App**! This application utilizes advanced deep learning techniques to accurately identify dog breeds from images. Whether you're a dog enthusiast, a veterinarian, or simply curious, this app provides quick and reliable breed identification right at your fingertips.
+
+    **What This App Does:**
+    - **Image Upload:** Easily upload a photo of your dog or any dog you encounter.
+    - **Live Camera Capture:** Use your device's camera to take a real-time photo for immediate identification.
+    - **Breed Prediction:** Leveraging a trained deep learning model, the app predicts the dog's breed with high accuracy.
+    - **Confidence Scores:** Receive confidence percentages indicating the reliability of each prediction.
+
+    **Effectiveness:**
+    - **High Accuracy:** Our model achieves up to **92% accuracy** in breed prediction.
+    - **Comprehensive Dataset:** Trained on over **10,000 images** covering **120 different breeds**.
+    - **Optimized Performance:** Utilizes the **MobileNetV3** architecture, ensuring both speed and precision.
+
+    **Developed By:**
+    - **Suraj Singh** – A passionate AI developer with expertise in machine learning and computer vision. For any questions or feedback, feel free to reach out at [surajpratapsingh9798@gmail.com](mailto:surajpratapsingh9798@gmail.com).
+    """)
+
 
     # ==============================
     # Footer
