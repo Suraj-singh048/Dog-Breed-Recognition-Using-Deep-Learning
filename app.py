@@ -159,10 +159,13 @@ def main():
                 with st.spinner('🔍 Predicting...'):
                     predicted_breed, confidence = predict_breed(model, image_array, unique_breeds)
 
-                # Display results
-                st.success("✅ Prediction Complete!")
-                st.markdown(f"**Predicted Breed:** {predicted_breed}")
-                st.markdown(f"**Confidence:** {confidence:.2f}%")
+                # Display results with confidence check
+                if confidence >= 40:
+                    st.success("✅ Prediction Complete!")
+                    st.markdown(f"**Predicted Breed:** {predicted_breed}")
+                    st.markdown(f"**Confidence:** {confidence:.2f}%")
+                else:
+                    st.warning("⚠️ Image not clear or dog not recognized. Please try another image.")
 
             except Exception as e:
                 st.error(f"An error occurred during prediction: {e}")
@@ -184,10 +187,13 @@ def main():
                 with st.spinner('🔍 Predicting...'):
                     predicted_breed, confidence = predict_breed(model, image_array, unique_breeds)
 
-                # Display results
-                st.success("✅ Prediction Complete!")
-                st.markdown(f"**Predicted Breed:** {predicted_breed}")
-                st.markdown(f"**Confidence:** {confidence:.2f}%")
+                # Display results with confidence check
+                if confidence >= 40:
+                    st.success("✅ Prediction Complete!")
+                    st.markdown(f"**Predicted Breed:** {predicted_breed}")
+                    st.markdown(f"**Confidence:** {confidence:.2f}%")
+                else:
+                    st.warning("⚠️ Image not clear or dog not recognized. Please try another image.")
 
             except Exception as e:
                 st.error(f"An error occurred during prediction: {e}")
