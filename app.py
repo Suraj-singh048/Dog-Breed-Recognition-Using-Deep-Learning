@@ -51,12 +51,10 @@ def add_custom_css():
             text-align: center;
             padding: 10px;
         }
-        /* Additional Styling for Info Sections */
-        .info-section {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
+        /* Additional Styling for Information */
+        .main-info {
+            margin: 20px 0;
+            line-height: 1.6;
         }
         </style>
         """,
@@ -76,55 +74,27 @@ st.set_page_config(
 add_custom_css()
 
 # ==============================
-# Title and Description
+# Title and Main Information
 # ==============================
 st.title("🐶 Dog Breed Identification App")
 
-# ==============================
-# About Section
-# ==============================
 st.markdown(
     """
-    <div class="info-section">
-        ### 📖 About the App
-        Welcome to the **Dog Breed Identification App**! This application leverages advanced deep learning techniques to accurately identify the breed of a dog from an uploaded image or a captured photo. Whether you're a dog enthusiast, a veterinarian, or just curious, this app provides quick and reliable breed identification right at your fingertips.
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+    Welcome to the **Dog Breed Identification App**! This application utilizes advanced deep learning techniques to accurately identify dog breeds from images. Whether you're a dog enthusiast, a veterinarian, or simply curious, this app provides quick and reliable breed identification right at your fingertips.
 
-# ==============================
-# Effectiveness Section
-# ==============================
-st.markdown(
-    """
-    <div class="info-section">
-        ### 📈 Effectiveness
-        Our model has been trained on a comprehensive dataset of over 10,000 dog images spanning 120 different breeds. Utilizing a **MobileNetV3** architecture optimized with TensorFlow Hub, the app achieves an impressive **92% accuracy** in breed prediction. Additionally, the model provides confidence scores to give you an idea of how certain the prediction is.
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+    **What This App Does:**
+    - **Image Upload:** Easily upload a photo of your dog or any dog you encounter.
+    - **Live Camera Capture:** Use your device's camera to take a real-time photo for immediate identification.
+    - **Breed Prediction:** Leveraging a trained deep learning model, the app predicts the dog's breed with high accuracy.
+    - **Confidence Scores:** Receive confidence percentages indicating the reliability of each prediction.
 
-# ==============================
-# Developed By Section
-# ==============================
-st.markdown(
-    """
-    <div class="info-section">
-        ### 👨‍💻 Developed By
-        This application was developed by **Suraj Singh**, a passionate AI developer with expertise in machine learning and computer vision. If you have any questions or feedback, feel free to reach out at [surajpratapsingh9798@gmail.com](mailto:surajpratapsingh9798@gmail.com).
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+    **Effectiveness:**
+    - **High Accuracy:** Our model achieves up to **92% accuracy** in breed prediction.
+    - **Comprehensive Dataset:** Trained on over **10,000 images** covering **120 different breeds**.
+    - **Optimized Performance:** Utilizes the **MobileNetV3** architecture, ensuring both speed and precision.
 
-# ==============================
-# Additional App Description
-# ==============================
-st.markdown(
-    """
-    Upload an image of a dog or take a photo using your camera, and the app will predict its breed using a trained deep learning model. The intuitive interface ensures a seamless experience across all devices.
+    **Developed By:**
+    - **Suraj Singh** – A passionate AI developer with expertise in machine learning and computer vision. For any questions or feedback, feel free to reach out at [surajpratapsingh9798@gmail.com](mailto:surajpratapsingh9798@gmail.com).
     """
 )
 
@@ -177,23 +147,23 @@ def main():
     # Paths
     MODEL_PATH = "models/20240515-185416-full-image-set-mobilenetv3-Adam.h5"  # Update with your actual model filename
     LABELS_CSV = "labels.csv"
-    
+
     # Check if model file exists
     if not os.path.exists(MODEL_PATH):
         st.error(f"Model file not found at path: {MODEL_PATH}")
         st.stop()
-    
+
     # Load resources
     unique_breeds = load_label_mapping(LABELS_CSV)
     model = load_model(MODEL_PATH)
-    
+
     if model is None:
         st.error("Failed to load the model. Please check the model path and try again.")
         st.stop()
-    
+
     # Create tabs for Upload and Camera
     tabs = st.tabs(["📂 Upload Image", "📷 Take a Photo"])
-    
+
     with tabs[0]:
         uploaded_file = st.file_uploader("📂 Upload a dog image...", type=["jpg", "jpeg", "png"], accept_multiple_files=False)
         if uploaded_file:
@@ -201,24 +171,24 @@ def main():
                 # Open image
                 image = Image.open(uploaded_file)
                 st.image(image, caption='Uploaded Image', use_container_width=True)
-                
+
                 # Preprocess
                 image_array = preprocess_image(image)
-                
+
                 # Prediction
                 with st.spinner('🔍 Predicting...'):
                     predicted_breed, confidence = predict_breed(model, image_array, unique_breeds)
-                
+
                 # Display results
                 st.success("✅ Prediction Complete!")
                 st.markdown(f"**Predicted Breed:** {predicted_breed}")
                 st.markdown(f"**Confidence:** {confidence:.2f}%")
-                
+
             except Exception as e:
                 st.error(f"An error occurred during prediction: {e}")
         else:
             st.info("🖼️ Please upload an image of a dog to get started.")
-    
+
     with tabs[1]:
         camera_image = st.camera_input("📷 Take a photo of a dog")
         if camera_image:
@@ -226,24 +196,24 @@ def main():
                 # Open image
                 image = Image.open(camera_image)
                 st.image(image, caption='Captured Image', use_container_width=True)
-                
+
                 # Preprocess
                 image_array = preprocess_image(image)
-                
+
                 # Prediction
                 with st.spinner('🔍 Predicting...'):
                     predicted_breed, confidence = predict_breed(model, image_array, unique_breeds)
-                
+
                 # Display results
                 st.success("✅ Prediction Complete!")
                 st.markdown(f"**Predicted Breed:** {predicted_breed}")
                 st.markdown(f"**Confidence:** {confidence:.2f}%")
-                
+
             except Exception as e:
                 st.error(f"An error occurred during prediction: {e}")
         else:
             st.info("📸 Capture a photo of a dog to get started.")
-    
+
     # ==============================
     # Footer
     # ==============================
