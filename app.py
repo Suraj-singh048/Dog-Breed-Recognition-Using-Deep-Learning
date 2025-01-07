@@ -115,9 +115,16 @@ def preprocess_image(image, img_size=224):
 # ==============================
 def predict_breed(model, image_array, unique_breeds):
     predictions = model.predict(image_array)
-    predicted_index = np.argmax(predictions, axis=1)[0]
+    
+    # Apply softmax if the model does not include it
+    if predictions.ndim == 2:
+        probabilities = tf.nn.softmax(predictions, axis=1).numpy()
+    else:
+        probabilities = tf.nn.softmax(np.expand_dims(predictions, axis=0), axis=1).numpy()
+    
+    predicted_index = np.argmax(probabilities, axis=1)[0]
     predicted_breed = unique_breeds[predicted_index]
-    confidence = predictions[0][predicted_index] * 100
+    confidence = probabilities[0][predicted_index] * 100
     return predicted_breed, confidence
 
 # ==============================
@@ -139,6 +146,9 @@ def handle_prediction(model, image, unique_breeds):
             st.success("✅ Prediction Complete!")
             st.markdown(f"**Predicted Breed:** {predicted_breed}")
             st.markdown(f"**Confidence:** {confidence:.2f}%")
+        
+        # Optional: Display the confidence score for debugging
+        st.markdown(f"*Debug: Confidence Score = {confidence:.2f}%*")
 
     except Exception as e:
         st.error(f"An error occurred during prediction: {e}")
