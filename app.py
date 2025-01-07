@@ -111,16 +111,30 @@ def preprocess_image(image, img_size=224):
     return image_array
 
 # ==============================
+# Function to check if model has softmax
+# ==============================
+def model_has_softmax(model):
+    """
+    Check if the model's last layer has a softmax activation.
+    """
+    last_layer = model.layers[-1]
+    if hasattr(last_layer, 'activation'):
+        return last_layer.activation == tf.keras.activations.softmax
+    return False
+
+# ==============================
 # Function to make predictions
 # ==============================
-def predict_breed(model, image_array, unique_breeds):
+def predict_breed(model, image_array, unique_breeds, apply_softmax=True):
+    """
+    Make predictions and calculate confidence scores.
+    """
     predictions = model.predict(image_array)
     
-    # Apply softmax if the model does not include it
-    if predictions.ndim == 2:
+    if apply_softmax:
         probabilities = tf.nn.softmax(predictions, axis=1).numpy()
     else:
-        probabilities = tf.nn.softmax(np.expand_dims(predictions, axis=0), axis=1).numpy()
+        probabilities = predictions  # Assume model already outputs probabilities
     
     predicted_index = np.argmax(probabilities, axis=1)[0]
     predicted_breed = unique_breeds[predicted_index]
@@ -130,14 +144,14 @@ def predict_breed(model, image_array, unique_breeds):
 # ==============================
 # Function to handle prediction and display results
 # ==============================
-def handle_prediction(model, image, unique_breeds):
+def handle_prediction(model, image, unique_breeds, apply_softmax=True):
     try:
         # Preprocess
         image_array = preprocess_image(image)
 
         # Prediction
         with st.spinner('🔍 Predicting...'):
-            predicted_breed, confidence = predict_breed(model, image_array, unique_breeds)
+            predicted_breed, confidence = predict_breed(model, image_array, unique_breeds, apply_softmax)
 
         # Display results based on confidence
         if confidence < 40:
@@ -174,6 +188,12 @@ def main():
         st.error("Failed to load the model. Please check the model path and try again.")
         st.stop()
 
+    # Determine if the model already applies softmax
+    apply_softmax = not model_has_softmax(model)
+
+    # Inform the user about the softmax application (for debugging)
+    st.markdown(f"*Debug: Softmax Applied = {apply_softmax}*")
+
     # Create tabs for Upload and Camera
     tabs = st.tabs(["📂 Upload Image", "📷 Take a Photo"])
 
@@ -186,7 +206,7 @@ def main():
                 st.image(image, caption='Uploaded Image', use_container_width=True)
 
                 # Handle prediction and display results
-                handle_prediction(model, image, unique_breeds)
+                handle_prediction(model, image, unique_breeds, apply_softmax)
 
             except Exception as e:
                 st.error(f"An error occurred during processing: {e}")
@@ -202,7 +222,7 @@ def main():
                 st.image(image, caption='Captured Image', use_container_width=True)
 
                 # Handle prediction and display results
-                handle_prediction(model, image, unique_breeds)
+                handle_prediction(model, image, unique_breeds, apply_softmax)
 
             except Exception as e:
                 st.error(f"An error occurred during processing: {e}")
