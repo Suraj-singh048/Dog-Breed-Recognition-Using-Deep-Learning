@@ -150,7 +150,7 @@ def main():
             try:
                 # Open image
                 image = Image.open(uploaded_file)
-                st.image(image, caption='Uploaded Image', use_column_width=True)
+                st.image(image, caption='Uploaded Image', use_container_width=True)
                 
                 # Preprocess
                 image_array = preprocess_image(image)
@@ -175,7 +175,7 @@ def main():
             try:
                 # Open image
                 image = Image.open(camera_image)
-                st.image(image, caption='Captured Image', use_column_width=True)
+                st.image(image, caption='Captured Image', use_container_width=True)
                 
                 # Preprocess
                 image_array = preprocess_image(image)
@@ -200,7 +200,7 @@ def main():
     st.markdown(
         """
         <div class="footer">
-            🐾 Developed by Suraj Singh (surajpratapsingh9798@gmail.com) | © 2024 Dog Breed Identification
+            🐾 Developed by Suraj Singh (surajpratapsingh9798@gmail.com) | © 2024
         </div>
         """,
         unsafe_allow_html=True
